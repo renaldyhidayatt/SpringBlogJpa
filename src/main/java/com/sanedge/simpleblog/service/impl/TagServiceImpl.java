@@ -1,6 +1,7 @@
 package com.sanedge.simpleblog.service.impl;
 
 import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 
@@ -8,7 +9,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.sanedge.simpleblog.dto.request.TagRequest;
+import com.sanedge.simpleblog.dto.response.MessageResponse;
 import com.sanedge.simpleblog.dto.response.TagResponse;
+import com.sanedge.simpleblog.exception.NotFoundException;
 import com.sanedge.simpleblog.models.Tag;
 import com.sanedge.simpleblog.repository.TagRepository;
 import com.sanedge.simpleblog.service.TagService;
@@ -23,7 +26,7 @@ public class TagServiceImpl implements TagService {
     }
 
     @Override
-    public TagResponse save(TagRequest tag) {
+    public MessageResponse save(TagRequest tag) {
         Tag tagModel = new Tag();
         tagModel.setName(tag.getName());
         tagModel.setSlug(tag.getSlug());
@@ -39,50 +42,67 @@ public class TagServiceImpl implements TagService {
         tagResponse.setCreatedAt(tagModel.getCreatedAt());
         tagResponse.setUpdatedAt(tagModel.getUpdatedAt());
 
-        return tagResponse;
+        return MessageResponse.builder().message("Berhasil mendapatkan data").data(tagResponse).statusCode(200).build();
 
     }
 
     @Override
-    public TagResponse findById(Long id) {
-        // TODO Auto-generated method stub
-        return null;
+    public MessageResponse findById(Long id) {
+        Tag tag = this.tagRepository.findById(id).orElseThrow(() -> new NotFoundException("not found"));
+
+        return MessageResponse.builder().message("Berhasil mendapatkan data").data(tag).statusCode(200).build();
     }
 
     @Override
-    public void deleteById(Long id) {
-        // TODO Auto-generated method stub
+    public MessageResponse deleteById(Long id) {
+        Tag tag = this.tagRepository.findById(id).orElseThrow(() -> new NotFoundException("not found"));
 
+        return MessageResponse.builder().message("Berhasil mendapatkan data").data(tag).statusCode(200).build();
     }
 
     @Override
-    public List<TagResponse> getArticlesCountTaggedWith(String tagName) {
-        // TODO Auto-generated method stub
-        return null;
+    public List<MessageResponse> getArticlesCountTaggedWith(String tagName) {
+        List<Tag> tags = this.tagRepository.getArticlesCountTaggedWith(tagName);
+        MessageResponse messageResponse = MessageResponse.builder().message("Berhasil mendapatkan data").data(tags)
+                .statusCode(200).build();
+
+        return Collections.singletonList(messageResponse);
     }
 
     @Override
-    public List<TagResponse> findAll() {
-        // TODO Auto-generated method stub
-        return null;
+    public List<MessageResponse> findAll() {
+        List<Tag> tags = this.tagRepository.findAll();
+        MessageResponse messageResponse = MessageResponse.builder().message("Berhasil mendapatkan data").data(tags)
+                .statusCode(200).build();
+
+        return Collections.singletonList(messageResponse);
     }
 
     @Override
-    public List<TagResponse> fetchTagFromArticles(List<Long> ids) {
-        // TODO Auto-generated method stub
-        return null;
+    public List<MessageResponse> fetchTagFromArticles(List<Long> ids) {
+        List<Tag> tags = this.tagRepository.fetchTagFromArticles(ids);
+        MessageResponse messageResponse = MessageResponse.builder().message("Berhasil mendapatkan data").statusCode(200)
+                .build();
+
+        return Collections.singletonList(messageResponse);
     }
 
     @Override
-    public Collection<TagResponse> fetchNameAndSlug() {
-        // TODO Auto-generated method stub
-        return null;
+    public Collection<MessageResponse> fetchNameAndSlug() {
+        Collection<Tag> tags = this.tagRepository.fetchNameAndSlug();
+        MessageResponse messageResponse = MessageResponse.builder().message("Berhasil mendapatkan data").data(tags)
+                .statusCode(200).build();
+
+        return Collections.singletonList(messageResponse);
     }
 
     @Override
-    public Set<TagResponse> fetchTagsFromArticleId(Long id) {
-        // TODO Auto-generated method stub
-        return null;
+    public List<MessageResponse> fetchTagsFromArticleId(Long id) {
+        Set<Tag> tags = this.tagRepository.fetchTagsFromArticleId(id);
+        MessageResponse messageResponse = MessageResponse.builder().message("Berhasil mendapatkan data").data(tags)
+                .statusCode(200).build();
+
+        return Collections.singletonList(messageResponse);
     }
 
 }

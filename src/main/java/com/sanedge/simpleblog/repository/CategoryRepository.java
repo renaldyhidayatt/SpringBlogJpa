@@ -19,13 +19,13 @@ public interface CategoryRepository extends JpaRepository<Category, Long> {
 
     Category findByName(String name);
 
-    @Query("select c.name, count(a) from Article a join a.categories c where c.name=:name group by c.name")
+    @Query("select c.name, count(a) from article a join a.categories c where c.name=:name group by c.name")
     public List<Category> getArticlesCountCategorisedAs(@Param("name") String categoryName);
 
-    @Query("select c.id, c.name, c.slug from Category c")
+    @Query("select c.id, c.name, c.slug from category c")
     Collection<Category[]> fetchNameAndSlug();
 
-    @Query("select c from Category c inner join c.articles a where a.id = :id")
+    @Query("select c from category c inner join c.articles a where a.id = :id")
     Set<Category> fetchCategoriesFromArticleId(Long id);
 
 }
