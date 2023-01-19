@@ -1,16 +1,22 @@
 package com.sanedge.simpleblog.models;
 
-import java.util.Date;
-
 import jakarta.persistence.Column;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
 
-public class Comment {
+@Data
+@EqualsAndHashCode(callSuper = false)
+@AllArgsConstructor
+@NoArgsConstructor
+public class Comment extends Timestamped {
     @Id
     @Column(name = "id")
-    private String id;
+    private Long id;
 
     @Column(name = "content", length = 2048)
     private String content;
@@ -23,9 +29,4 @@ public class Comment {
     @JoinColumn(name = "user_id")
     private User user;
 
-    @Column(name = "created_at")
-    private Date createdAt;
-
-    @Column(name = "updated_at")
-    private Date updatedAt;
 }

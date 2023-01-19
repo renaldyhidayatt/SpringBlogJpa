@@ -1,20 +1,25 @@
 package com.sanedge.simpleblog.models;
 
-import java.util.Date;
-
 import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
 
-public class User {
+@Data
+@EqualsAndHashCode(callSuper = false)
+@AllArgsConstructor
+@NoArgsConstructor
+@Entity
+public class User extends Timestamped {
     @Id
     @Column(name = "id")
-    private String id;
+    private Long id;
 
-    @Column(name = "firstname", nullable = false)
-    private String firstName;
-
-    @Column(name = "lastname", nullable = false)
-    private String lastName;
+    @Column(name = "username", unique = true, nullable = false)
+    private String username;
 
     @Column(name = "email", unique = true, nullable = false)
     private String email;
@@ -28,9 +33,4 @@ public class User {
     @Column(name = "password", nullable = false)
     private String password;
 
-    @Column(name = "created_at")
-    private Date createdAt;
-
-    @Column(name = "updated_at")
-    private Date updatedAt;
 }

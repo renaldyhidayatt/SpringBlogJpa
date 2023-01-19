@@ -1,20 +1,25 @@
 package com.sanedge.simpleblog.models;
 
-import java.util.Date;
 import java.util.List;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.ManyToMany;
-import jakarta.persistence.Table;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
 
+@Data
+@EqualsAndHashCode(callSuper = false)
+@AllArgsConstructor
+@NoArgsConstructor
 @Entity
-@Table(name = "categories")
-public class Category {
+public class Category extends Timestamped {
     @Id
     @Column(name = "id")
-    private String id;
+    private Long id;
 
     @Column(name = "name", unique = true)
     private String name;
@@ -28,9 +33,4 @@ public class Category {
     @ManyToMany(mappedBy = "categories")
     private List<Article> articles;
 
-    @Column(name = "created_at")
-    private Date createdAt;
-
-    @Column(name = "updated_at")
-    private Date updatedAt;
 }

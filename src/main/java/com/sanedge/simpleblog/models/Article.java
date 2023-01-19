@@ -1,6 +1,5 @@
 package com.sanedge.simpleblog.models;
 
-import java.sql.Date;
 import java.util.List;
 
 import jakarta.persistence.Column;
@@ -11,14 +10,20 @@ import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
-import jakarta.persistence.Table;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
 
+@Data
+@EqualsAndHashCode(callSuper = false)
+@AllArgsConstructor
+@NoArgsConstructor
 @Entity
-@Table(name = "articles")
-public class Article {
+public class Article extends Timestamped {
     @Id
     @Column(name = "id")
-    private String id;
+    private Long id;
 
     @Column(name = "slug", unique = true)
     private String slug;
@@ -46,10 +51,4 @@ public class Article {
 
     @OneToMany(mappedBy = "article")
     private List<Comment> comments;
-
-    @Column(name = "created_at")
-    private Date createdAt;
-
-    @Column(name = "updated_at")
-    private Date updatedAt;
 }
