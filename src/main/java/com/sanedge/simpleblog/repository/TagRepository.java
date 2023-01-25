@@ -16,15 +16,15 @@ public interface TagRepository extends JpaRepository<Tag, Long> {
     @Query("SELECT t.name, count(a) FROM Article a INNER JOIN a.tags t WHERE t.name = :name GROUP BY t.id")
     public List<Tag> getArticlesCountTaggedWith(@Param("name") String tagName);
 
-    @Query("SELECT t.name, count(t.name) FROM tag t INNER JOIN t.articles a GROUP BY t.name")
+    @Query("SELECT t.name, count(t.name) FROM Tag t INNER JOIN t.articles a GROUP BY t.name")
     public List<Tag> getAll();
 
-    @Query("SELECT t FROM tag t INNER JOIN t.articles a WHERE a.id in :ids")
+    @Query("SELECT t FROM Tag t INNER JOIN t.articles a WHERE a.id in :ids")
     List<Tag> fetchTagFromArticles(List<Long> ids);
 
-    @Query("SELECT t FROM tag t")
+    @Query("SELECT t FROM Tag t")
     Collection<Tag> fetchNameAndSlug();
 
-    @Query("select t from tag t inner join t.articles a where a.id = :id")
+    @Query("select t from Tag t inner join t.articles a where a.id = :id")
     Set<Tag> fetchTagsFromArticleId(Long id);
 }

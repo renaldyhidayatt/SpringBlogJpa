@@ -14,7 +14,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-@Table(name = "user")
+@Table(name = "users")
 public class User extends Timestamped {
     @Id
     @Column(name = "id")
@@ -26,10 +26,10 @@ public class User extends Timestamped {
     @Column(name = "email", unique = true, nullable = false)
     private String email;
 
-    @Column(name = "bio", nullable = false)
+    @Column(name = "bio", nullable = true)
     private String bio;
 
-    @Column(name = "image", nullable = false)
+    @Column(name = "image", nullable = true)
     private String image;
 
     @Column(name = "password", nullable = false)

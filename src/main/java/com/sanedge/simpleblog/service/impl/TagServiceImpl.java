@@ -81,7 +81,8 @@ public class TagServiceImpl implements TagService {
     @Override
     public List<MessageResponse> fetchTagFromArticles(List<Long> ids) {
         List<Tag> tags = this.tagRepository.fetchTagFromArticles(ids);
-        MessageResponse messageResponse = MessageResponse.builder().message("Berhasil mendapatkan data").statusCode(200)
+        MessageResponse messageResponse = MessageResponse.builder().message("Berhasil mendapatkan data").data(tags)
+                .statusCode(200)
                 .build();
 
         return Collections.singletonList(messageResponse);

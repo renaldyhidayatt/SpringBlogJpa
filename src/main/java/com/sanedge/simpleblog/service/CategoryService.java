@@ -1,30 +1,21 @@
 package com.sanedge.simpleblog.service;
 
-import java.util.Collection;
-import java.util.List;
-import java.util.Set;
-
-import org.springframework.boot.autoconfigure.data.web.SpringDataWebProperties.Pageable;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
-import com.sanedge.simpleblog.models.Category;
+import com.sanedge.simpleblog.dto.request.CategoryRequest;
+import com.sanedge.simpleblog.dto.response.MessageResponse;
 
 public interface CategoryService {
-    Page<Category> getAllCategoriesPaged(Pageable req);
+    Page<MessageResponse> findAll(Pageable pageable);
 
-    Category getByName(String name);
+    MessageResponse findByName(String name);
 
-    List<Category> getArticlesCountCategorizedAs(String categoryName);
+    MessageResponse create(CategoryRequest category);
 
-    Collection<Category[]> fetchNameAndSlug();
+    MessageResponse update(Long id, CategoryRequest category);
 
-    Set<Category> fetchCategoriesFromArticleId(Long id);
+    MessageResponse delete(Long id);
 
-    void create(Category category);
-
-    void update(Category category);
-
-    void delete(Category category);
-
-    void deleteById(Long id);
+    MessageResponse findById(Long id);
 }

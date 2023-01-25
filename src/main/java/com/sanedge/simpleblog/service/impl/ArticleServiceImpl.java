@@ -26,123 +26,157 @@ import com.sanedge.simpleblog.service.ArticleService;
 @Service
 public class ArticleServiceImpl implements ArticleService {
 
-    private ArticleRepository articleRepository;
-    private TagRepository tagRepository;
-    private CategoryRepository categoryRepository;
+        private ArticleRepository articleRepository;
+        private TagRepository tagRepository;
+        private CategoryRepository categoryRepository;
 
-    @Autowired
-    public ArticleServiceImpl(ArticleRepository articleRepository, TagRepository tagRepository,
-            CategoryRepository categoryRepository) {
-        this.articleRepository = articleRepository;
-        this.tagRepository = tagRepository;
-        this.categoryRepository = categoryRepository;
-    }
-
-    @Override
-    public Page<MessageResponse> findByCategory(String category, Pageable pageable) {
-        Page<Article> articles = articleRepository.findByCategory(category, pageable);
-        List<ArticleResponse> articleDtos = new ArrayList<>();
-        for (Article article : articles) {
-            ArticleResponse dto = new ArticleResponse(article.getId(), article.getTitle(), article.getSlug(),
-                    article.getDescription(), article.getBody(), article.getCategories(), article.getTags(),
-                    article.getCreatedAt(), article.getUpdatedAt());
-            articleDtos.add(dto);
+        @Autowired
+        public ArticleServiceImpl(ArticleRepository articleRepository, TagRepository tagRepository,
+                        CategoryRepository categoryRepository) {
+                this.articleRepository = articleRepository;
+                this.tagRepository = tagRepository;
+                this.categoryRepository = categoryRepository;
         }
-        MessageResponse message = MessageResponse.builder().message("Berhasil mendapatkan data").data(articleDtos)
-                .statusCode(200).build();
-        List<MessageResponse> messageList = new ArrayList<>();
-        messageList.add(message);
-        return new PageImpl<>(messageList, pageable, articles.getTotalElements());
-    }
 
-    @Override
-    public Page<MessageResponse> findByCategorySlug(String slug, Pageable pageable) {
-        Page<Article> articles = articleRepository.findByCategorySlug(slug, pageable);
-        List<ArticleResponse> articleDtos = new ArrayList<>();
-        for (Article article : articles) {
-            ArticleResponse dto = new ArticleResponse(article.getId(), article.getTitle(), article.getSlug(),
-                    article.getDescription(), article.getBody(), article.getCategories(), article.getTags(),
-                    article.getCreatedAt(), article.getUpdatedAt());
-            articleDtos.add(dto);
+        @Override
+        public Page<MessageResponse> findByCategory(String category, Pageable pageable) {
+                Page<Article> articles = articleRepository.findByCategory(category, pageable);
+                List<ArticleResponse> articleDtos = new ArrayList<>();
+                for (Article article : articles) {
+                        ArticleResponse dto = new ArticleResponse(article.getId(), article.getTitle(),
+                                        article.getSlug(),
+                                        article.getDescription(), article.getBody(), article.getCategories(),
+                                        article.getTags(),
+                                        article.getCreatedAt(), article.getUpdatedAt());
+                        articleDtos.add(dto);
+                }
+                MessageResponse message = MessageResponse.builder().message("Berhasil mendapatkan data")
+                                .data(articleDtos)
+                                .statusCode(200).build();
+                List<MessageResponse> messageList = new ArrayList<>();
+                messageList.add(message);
+                return new PageImpl<>(messageList, pageable, articles.getTotalElements());
         }
-        MessageResponse message = MessageResponse.builder().message("Berhasil mendapatkan data").data(articleDtos)
-                .statusCode(200).build();
-        List<MessageResponse> messageList = new ArrayList<>();
-        messageList.add(message);
-        return new PageImpl<>(messageList, pageable, articles.getTotalElements());
-    }
 
-    @Override
-    public Page<MessageResponse> findByTagSlug(String slug, Pageable pageable) {
-        Page<Article> articles = articleRepository.findByTagSlug(slug, pageable);
-        List<ArticleResponse> articleDtos = new ArrayList<>();
-        for (Article article : articles) {
-            ArticleResponse dto = new ArticleResponse(article.getId(), article.getTitle(), article.getSlug(),
-                    article.getDescription(), article.getBody(), article.getCategories(), article.getTags(),
-                    article.getCreatedAt(), article.getUpdatedAt());
-            articleDtos.add(dto);
+        @Override
+        public Page<MessageResponse> findByCategorySlug(String slug, Pageable pageable) {
+                Page<Article> articles = articleRepository.findByCategorySlug(slug, pageable);
+                List<ArticleResponse> articleDtos = new ArrayList<>();
+                for (Article article : articles) {
+                        ArticleResponse dto = new ArticleResponse(article.getId(), article.getTitle(),
+                                        article.getSlug(),
+                                        article.getDescription(), article.getBody(), article.getCategories(),
+                                        article.getTags(),
+                                        article.getCreatedAt(), article.getUpdatedAt());
+                        articleDtos.add(dto);
+                }
+                MessageResponse message = MessageResponse.builder().message("Berhasil mendapatkan data")
+                                .data(articleDtos)
+                                .statusCode(200).build();
+                List<MessageResponse> messageList = new ArrayList<>();
+                messageList.add(message);
+                return new PageImpl<>(messageList, pageable, articles.getTotalElements());
         }
-        MessageResponse message = MessageResponse.builder().message("Berhasil mendapatkan data").data(articles)
-                .statusCode(200).build();
-        List<MessageResponse> messageList = new ArrayList<>();
-        messageList.add(message);
-        return new PageImpl<>(messageList, pageable, articles.getTotalElements());
-    }
 
-    @Override
-    public MessageResponse findByUser(User user) {
-        Article article = articleRepository.findByUser(user);
-        if (article == null)
-            return null;
-        ArticleResponse dto = new ArticleResponse(article.getId(), article.getTitle(), article.getSlug(),
-                article.getDescription(), article.getBody(), article.getCategories(), article.getTags(),
-                article.getCreatedAt(), article.getUpdatedAt());
+        @Override
+        public Page<MessageResponse> findByTagSlug(String slug, Pageable pageable) {
+                Page<Article> articles = articleRepository.findByTagSlug(slug, pageable);
+                List<ArticleResponse> articleDtos = new ArrayList<>();
+                for (Article article : articles) {
+                        ArticleResponse dto = new ArticleResponse(article.getId(), article.getTitle(),
+                                        article.getSlug(),
+                                        article.getDescription(), article.getBody(), article.getCategories(),
+                                        article.getTags(),
+                                        article.getCreatedAt(), article.getUpdatedAt());
+                        articleDtos.add(dto);
+                }
+                MessageResponse message = MessageResponse.builder().message("Berhasil mendapatkan data").data(articles)
+                                .statusCode(200).build();
+                List<MessageResponse> messageList = new ArrayList<>();
+                messageList.add(message);
+                return new PageImpl<>(messageList, pageable, articles.getTotalElements());
+        }
 
-        return MessageResponse.builder().message("Berhasil mendapatkan data").data(dto).statusCode(200).build();
-    }
+        @Override
+        public MessageResponse findByUser(User user) {
+                Article article = articleRepository.findByUser(user);
+                if (article == null)
+                        return null;
+                ArticleResponse dto = new ArticleResponse(article.getId(), article.getTitle(), article.getSlug(),
+                                article.getDescription(), article.getBody(), article.getCategories(), article.getTags(),
+                                article.getCreatedAt(), article.getUpdatedAt());
 
-    @Override
-    public MessageResponse save(ArticleRequest request) {
-        Article article = new Article();
+                return MessageResponse.builder().message("Berhasil mendapatkan data").data(dto).statusCode(200).build();
+        }
 
-        Tag tag = this.tagRepository.findById(request.getTagId())
-                .orElseThrow(() -> new NotFoundException("not found " + request.getTagId()));
-        Category category = this.categoryRepository.findById(request.getCategoryId())
-                .orElseThrow(() -> new NotFoundException("not found " + request.getCategoryId()));
+        @Override
+        public MessageResponse save(ArticleRequest request) {
+                Article article = new Article();
 
-        article.setTitle(request.getTitle());
-        article.setSlug(request.getSlug());
-        article.setDescription(request.getDescription());
-        article.setBody(request.getBody());
+                Tag tag = this.tagRepository.findById(request.getTagId())
+                                .orElseThrow(() -> new NotFoundException("not found " + request.getTagId()));
+                Category category = this.categoryRepository.findById(request.getCategoryId())
+                                .orElseThrow(() -> new NotFoundException("not found " + request.getCategoryId()));
 
-        article.setTags(Arrays.asList(tag));
-        article.setCategories(Arrays.asList(category));
+                article.setTitle(request.getTitle());
+                article.setSlug(request.getSlug());
+                article.setDescription(request.getDescription());
+                article.setBody(request.getBody());
 
-        this.articleRepository.save(article);
+                article.setTags(Arrays.asList(tag));
+                article.setCategories(Arrays.asList(category));
 
-        return MessageResponse.builder().message("Berhasil mendapakan data").data(article).statusCode(201).build();
-    }
+                this.articleRepository.save(article);
 
-    @Override
-    public MessageResponse findById(Long id) {
-        Article article = this.articleRepository.findById(id)
-                .orElseThrow(() -> new NotFoundException("not found " + id));
+                return MessageResponse.builder().message("Berhasil mendapakan data").data(article).statusCode(201)
+                                .build();
+        }
 
-        MessageResponse message = MessageResponse.builder().message("Berhasil mendapatkan data").data(article)
-                .statusCode(200).build();
-        return message;
-    }
+        @Override
+        public MessageResponse updateById(long id, ArticleRequest request) {
+                Article article = this.articleRepository.findById(id)
+                                .orElseThrow(() -> new NotFoundException("not found " + id));
 
-    @Override
-    public MessageResponse delete(long id) {
-        Article article = this.articleRepository.findById(id)
-                .orElseThrow(() -> new NotFoundException("not found " + id));
+                Tag tag = this.tagRepository.findById(request.getTagId())
+                                .orElseThrow(() -> new NotFoundException("not found " + request.getTagId()));
+                Category category = this.categoryRepository.findById(request.getCategoryId())
+                                .orElseThrow(() -> new NotFoundException("not found " + request.getCategoryId()));
 
-        this.articleRepository.delete(article);
-        MessageResponse message = MessageResponse.builder().message("Berhasil mendapatkan dekete").data(null)
-                .statusCode(200).build();
-        return message;
+                article.setTitle(request.getTitle());
+                article.setSlug(request.getSlug());
+                article.setDescription(request.getDescription());
+                article.setBody(request.getBody());
 
-    }
+                article.setTags(Arrays.asList(tag));
+                article.setCategories(Arrays.asList(category));
+
+                this.articleRepository.save(article);
+
+                return MessageResponse.builder().message("Berhasil mendapakan data").data(article).statusCode(201)
+                                .build();
+
+        }
+
+        @Override
+        public MessageResponse findById(Long id) {
+                Article article = this.articleRepository.findById(id)
+                                .orElseThrow(() -> new NotFoundException("not found " + id));
+
+                MessageResponse message = MessageResponse.builder().message("Berhasil mendapatkan data").data(article)
+                                .statusCode(200).build();
+                return message;
+        }
+
+        @Override
+        public MessageResponse delete(long id) {
+                Article article = this.articleRepository.findById(id)
+                                .orElseThrow(() -> new NotFoundException("not found " + id));
+
+                this.articleRepository.delete(article);
+                MessageResponse message = MessageResponse.builder().message("Berhasil mendapatkan dekete").data(null)
+                                .statusCode(200).build();
+                return message;
+
+        }
 
 }

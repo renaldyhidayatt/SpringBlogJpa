@@ -18,6 +18,8 @@ public interface ArticleService {
 
     MessageResponse save(ArticleRequest article);
 
+    MessageResponse updateById(long id, ArticleRequest article);
+
     MessageResponse findById(Long id);
 
     MessageResponse delete(long id);

@@ -44,11 +44,11 @@ public class Article extends Timestamped {
     private User user;
 
     @ManyToMany
-    @JoinTable(name = "articles_tags", joinColumns = @JoinColumn(name = "article_id"), inverseJoinColumns = @JoinColumn(name = "tag_id"))
+    @JoinTable(name = "articles_tags", joinColumns = @JoinColumn(name = "id"), inverseJoinColumns = @JoinColumn(name = "tag_id"))
     private List<Tag> tags;
 
     @ManyToMany
-    @JoinTable(name = "articles_categories", joinColumns = @JoinColumn(name = "article_id"), inverseJoinColumns = @JoinColumn(name = "category_id"))
+    @JoinTable(name = "articles_categories", joinColumns = @JoinColumn(name = "id"), inverseJoinColumns = @JoinColumn(name = "category_id"))
     private List<Category> categories;
 
     @OneToMany(mappedBy = "article")
