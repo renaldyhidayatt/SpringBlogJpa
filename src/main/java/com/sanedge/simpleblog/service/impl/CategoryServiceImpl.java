@@ -20,94 +20,102 @@ import com.sanedge.simpleblog.service.CategoryService;
 @Service
 public class CategoryServiceImpl implements CategoryService {
 
-    private CategoryRepository categoryRepository;
+        private CategoryRepository categoryRepository;
 
-    @Autowired
-    public CategoryServiceImpl(CategoryRepository categoryRepository) {
-        this.categoryRepository = categoryRepository;
-    }
-
-    public Page<MessageResponse> findAll(Pageable pageable) {
-        Page<Category> categories = this.categoryRepository.findAll(pageable);
-        List<CategoryResponse> categoryResponses = new ArrayList<>();
-        for (Category category : categories) {
-            CategoryResponse dto = new CategoryResponse(category.getId(), category.getName(), category.getSlug(),
-                    category.getDescription(), category.getArticles(), category.getCreatedAt(),
-                    category.getUpdatedAt());
-            categoryResponses.add(dto);
+        @Autowired
+        public CategoryServiceImpl(CategoryRepository categoryRepository) {
+                this.categoryRepository = categoryRepository;
         }
-        MessageResponse message = MessageResponse.builder().message("Berhasil mendapatkan data").data(categoryResponses)
-                .statusCode(200).build();
-        List<MessageResponse> messageList = new ArrayList<>();
-        messageList.add(message);
-        return new PageImpl<>(messageList, pageable, categories.getTotalElements());
-    }
 
-    public MessageResponse findByName(String name) {
-        Category category = this.categoryRepository.findByName(name);
+        public Page<MessageResponse> findAll(Pageable pageable) {
+                Page<Category> categories = this.categoryRepository.findAll(pageable);
+                List<CategoryResponse> categoryResponses = new ArrayList<>();
+                for (Category category : categories) {
+                        CategoryResponse dto = new CategoryResponse(category.getId(), category.getName(),
+                                        category.getSlug(),
+                                        category.getDescription(), category.getArticles(), category.getCreatedAt(),
+                                        category.getUpdatedAt());
+                        categoryResponses.add(dto);
+                }
+                MessageResponse message = MessageResponse.builder().message("Berhasil mendapatkan data")
+                                .data(categoryResponses)
+                                .statusCode(200).build();
+                List<MessageResponse> messageList = new ArrayList<>();
+                messageList.add(message);
+                return new PageImpl<>(messageList, pageable, categories.getTotalElements());
+        }
 
-        MessageResponse message = MessageResponse.builder().message("Berhasil mendapatkan data").data(category)
-                .statusCode(200).build();
+        public MessageResponse findByName(String name) {
+                Category category = this.categoryRepository.findByName(name);
 
-        return message;
-    }
+                MessageResponse message = MessageResponse.builder().message("Berhasil mendapatkan data").data(category)
+                                .statusCode(200).build();
 
-    @Override
-    public MessageResponse create(CategoryRequest categoryRequest) {
-        Category category = new Category();
+                return message;
+        }
 
-        category.setName(categoryRequest.getName());
-        category.setSlug(categoryRequest.getSlug());
-        category.setDescription(categoryRequest.getDescription());
+        @Override
+        public MessageResponse create(CategoryRequest categoryRequest) {
+                Category category = new Category();
 
-        this.categoryRepository.save(category);
+                category.setName(categoryRequest.getName());
+                category.setSlug(categoryRequest.getSlug());
+                category.setDescription(categoryRequest.getDescription());
 
-        CategoryResponse categoryResponse = CategoryResponse.builder().id(category.getId()).name(category.getName())
-                .slug(category.getSlug()).description(category.getDescription()).createdAt(category.getCreatedAt())
-                .updatedAt(category.getUpdatedAt()).build();
-        return MessageResponse.builder().message("Berhasil mendapatkan membuat data").data(categoryResponse)
-                .statusCode(200).build();
-    }
+                this.categoryRepository.save(category);
 
-    @Override
-    public MessageResponse update(Long id, CategoryRequest categoryRequest) {
-        Category category = this.categoryRepository.findById(id)
-                .orElseThrow(() -> new NotFoundException("No found category id"));
+                CategoryResponse categoryResponse = CategoryResponse.builder().id(category.getId())
+                                .name(category.getName())
+                                .slug(category.getSlug()).description(category.getDescription())
+                                .createdAt(category.getCreatedAt())
+                                .updatedAt(category.getUpdatedAt()).build();
+                return MessageResponse.builder().message("Berhasil mendapatkan membuat data").data(categoryResponse)
+                                .statusCode(200).build();
+        }
 
-        category.setName(categoryRequest.getName());
-        category.setSlug(categoryRequest.getSlug());
-        category.setDescription(categoryRequest.getDescription());
+        @Override
+        public MessageResponse update(Long id, CategoryRequest categoryRequest) {
+                Category category = this.categoryRepository.findById(id)
+                                .orElseThrow(() -> new NotFoundException("No found category id"));
 
-        this.categoryRepository.save(category);
+                category.setName(categoryRequest.getName());
+                category.setSlug(categoryRequest.getSlug());
+                category.setDescription(categoryRequest.getDescription());
 
-        CategoryResponse categoryResponse = CategoryResponse.builder().id(category.getId()).name(category.getName())
-                .slug(category.getSlug()).description(category.getDescription()).createdAt(category.getCreatedAt())
-                .updatedAt(category.getUpdatedAt()).build();
-        return MessageResponse.builder().message("Berhasil mendapatkan update data").data(categoryResponse)
-                .statusCode(200).build();
+                this.categoryRepository.save(category);
 
-    }
+                CategoryResponse categoryResponse = CategoryResponse.builder().id(category.getId())
+                                .name(category.getName())
+                                .slug(category.getSlug()).description(category.getDescription())
+                                .createdAt(category.getCreatedAt())
+                                .updatedAt(category.getUpdatedAt()).build();
+                return MessageResponse.builder().message("Berhasil mendapatkan update data").data(categoryResponse)
+                                .statusCode(200).build();
 
-    @Override
-    public MessageResponse delete(Long id) {
-        Category category = this.categoryRepository.findById(id)
-                .orElseThrow(() -> new NotFoundException("No found category id"));
+        }
 
-        this.categoryRepository.delete(category);
+        @Override
+        public MessageResponse delete(Long id) {
+                Category category = this.categoryRepository.findById(id)
+                                .orElseThrow(() -> new NotFoundException("No found category id"));
 
-        return MessageResponse.builder().message("Berhasil menghapus data").data(null).statusCode(200).build();
-    }
+                this.categoryRepository.delete(category);
 
-    @Override
-    public MessageResponse findById(Long id) {
-        Category category = this.categoryRepository.findById(id)
-                .orElseThrow(() -> new NotFoundException("No found category id"));
-        CategoryResponse categoryResponse = CategoryResponse.builder().id(category.getId()).name(category.getName())
-                .slug(category.getSlug()).description(category.getDescription()).createdAt(category.getCreatedAt())
-                .updatedAt(category.getUpdatedAt()).build();
-        return MessageResponse.builder().message("Berhasil mendapatkan  data").data(categoryResponse)
-                .statusCode(200).build();
+                return MessageResponse.builder().message("Berhasil menghapus data").data(null).statusCode(200).build();
+        }
 
-    }
+        @Override
+        public MessageResponse findById(Long id) {
+                Category category = this.categoryRepository.findById(id)
+                                .orElseThrow(() -> new NotFoundException("No found category id"));
+                CategoryResponse categoryResponse = CategoryResponse.builder().id(category.getId())
+                                .name(category.getName())
+                                .slug(category.getSlug()).description(category.getDescription())
+                                .createdAt(category.getCreatedAt())
+                                .updatedAt(category.getUpdatedAt()).build();
+                return MessageResponse.builder().message("Berhasil mendapatkan  data").data(categoryResponse)
+                                .statusCode(200).build();
+
+        }
 
 }

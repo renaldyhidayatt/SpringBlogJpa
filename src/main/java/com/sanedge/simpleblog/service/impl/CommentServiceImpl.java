@@ -18,124 +18,134 @@ import com.sanedge.simpleblog.models.User;
 import com.sanedge.simpleblog.repository.ArticleRepository;
 import com.sanedge.simpleblog.repository.CommentRepository;
 import com.sanedge.simpleblog.repository.UserRepository;
+import com.sanedge.simpleblog.service.CommentService;
 
 @Service
-public class CommentServiceImpl {
-    private CommentRepository commentRepository;
+public class CommentServiceImpl implements CommentService {
+        private CommentRepository commentRepository;
 
-    private ArticleRepository articleRepository;
-    private UserRepository userRepository;
+        private ArticleRepository articleRepository;
+        private UserRepository userRepository;
 
-    @Autowired
-    public CommentServiceImpl(CommentRepository commentRepository, ArticleRepository articleRepository,
-            UserRepository userRepository) {
-        this.commentRepository = commentRepository;
-        this.articleRepository = articleRepository;
-        this.userRepository = userRepository;
-    }
-
-    public MessageResponse findAll() {
-        List<Comment> comments = commentRepository.findAll();
-        List<CommentResponse> commentResponses = new ArrayList<>();
-        for (Comment comment : comments) {
-            CommentResponse commentResponse = new CommentResponse();
-            commentResponse.setId(comment.getId());
-            commentResponse.setContent(comment.getContent());
-            ArticleResponse articleResponse = new ArticleResponse();
-            articleResponse.setId(comment.getArticle().getId());
-            articleResponse.setTitle(comment.getArticle().getTitle());
-            articleResponse.setSlug(comment.getArticle().getSlug());
-            articleResponse.setDescription(comment.getArticle().getDescription());
-            articleResponse.setBody(comment.getArticle().getBody());
-            articleResponse.setCreatedAt(comment.getArticle().getCreatedAt());
-            articleResponse.setUpdatedAt(comment.getArticle().getUpdatedAt());
-            commentResponse.setArticle(articleResponse);
-
-            UserResponse userResponse = new UserResponse();
-
-            userResponse.setUsername(comment.getUsers().getUsername());
-            userResponse.setEmail(comment.getUsers().getEmail());
-            userResponse.setBio(comment.getUsers().getEmail());
-            userResponse.setImage(comment.getUsers().getImage());
-
-            commentResponse.setUser(userResponse);
-            commentResponses.add(commentResponse);
+        @Autowired
+        public CommentServiceImpl(CommentRepository commentRepository, ArticleRepository articleRepository,
+                        UserRepository userRepository) {
+                this.commentRepository = commentRepository;
+                this.articleRepository = articleRepository;
+                this.userRepository = userRepository;
         }
-        return MessageResponse.builder().message("Berhasil mendapatkan data").data(commentResponses).statusCode(200)
-                .build();
-    }
 
-    public MessageResponse findById(Long id) {
-        Comment comment = this.commentRepository.findById(id)
-                .orElseThrow(() -> new NotFoundException("Not found comment by id"));
+        @Override
+        public MessageResponse findAll() {
+                List<Comment> comments = commentRepository.findAll();
+                List<CommentResponse> commentResponses = new ArrayList<>();
+                for (Comment comment : comments) {
+                        CommentResponse commentResponse = new CommentResponse();
+                        commentResponse.setId(comment.getId());
+                        commentResponse.setContent(comment.getContent());
+                        ArticleResponse articleResponse = new ArticleResponse();
+                        articleResponse.setId(comment.getArticle().getId());
+                        articleResponse.setTitle(comment.getArticle().getTitle());
+                        articleResponse.setSlug(comment.getArticle().getSlug());
+                        articleResponse.setDescription(comment.getArticle().getDescription());
+                        articleResponse.setBody(comment.getArticle().getBody());
+                        articleResponse.setCreatedAt(comment.getArticle().getCreatedAt());
+                        articleResponse.setUpdatedAt(comment.getArticle().getUpdatedAt());
+                        commentResponse.setArticle(articleResponse);
 
-        CommentResponse commentResponse = new CommentResponse();
-        commentResponse.setId(comment.getId());
-        commentResponse.setContent(comment.getContent());
-        ArticleResponse articleResponse = new ArticleResponse();
-        articleResponse.setId(comment.getArticle().getId());
-        articleResponse.setTitle(comment.getArticle().getTitle());
-        articleResponse.setSlug(comment.getArticle().getSlug());
-        articleResponse.setDescription(comment.getArticle().getDescription());
-        articleResponse.setBody(comment.getArticle().getBody());
-        articleResponse.setCreatedAt(comment.getArticle().getCreatedAt());
-        articleResponse.setUpdatedAt(comment.getArticle().getUpdatedAt());
+                        UserResponse userResponse = new UserResponse();
 
-        commentResponse.setArticle(articleResponse);
+                        userResponse.setUsername(comment.getUsers().getUsername());
+                        userResponse.setEmail(comment.getUsers().getEmail());
+                        userResponse.setBio(comment.getUsers().getEmail());
+                        userResponse.setImage(comment.getUsers().getImage());
 
-        UserResponse userResponse = new UserResponse();
+                        commentResponse.setUser(userResponse);
+                        commentResponses.add(commentResponse);
+                }
+                return MessageResponse.builder().message("Berhasil mendapatkan data").data(commentResponses)
+                                .statusCode(200)
+                                .build();
+        }
 
-        userResponse.setUsername(comment.getUsers().getUsername());
-        userResponse.setEmail(comment.getUsers().getEmail());
-        userResponse.setBio(comment.getUsers().getEmail());
-        userResponse.setImage(comment.getUsers().getImage());
+        @Override
+        public MessageResponse findById(Long id) {
+                Comment comment = this.commentRepository.findById(id)
+                                .orElseThrow(() -> new NotFoundException("Not found comment by id"));
 
-        commentResponse.setUser(userResponse);
-        return MessageResponse.builder().message("Berhasil mendapatkan data").data(commentResponse).statusCode(200)
-                .build();
+                CommentResponse commentResponse = new CommentResponse();
+                commentResponse.setId(comment.getId());
+                commentResponse.setContent(comment.getContent());
+                ArticleResponse articleResponse = new ArticleResponse();
+                articleResponse.setId(comment.getArticle().getId());
+                articleResponse.setTitle(comment.getArticle().getTitle());
+                articleResponse.setSlug(comment.getArticle().getSlug());
+                articleResponse.setDescription(comment.getArticle().getDescription());
+                articleResponse.setBody(comment.getArticle().getBody());
+                articleResponse.setCreatedAt(comment.getArticle().getCreatedAt());
+                articleResponse.setUpdatedAt(comment.getArticle().getUpdatedAt());
 
-    }
+                commentResponse.setArticle(articleResponse);
 
-    public MessageResponse create(CommentRequest commentRequest) {
-        Comment comment = new Comment();
-        User user = this.userRepository.findById(commentRequest.getUser_id())
-                .orElseThrow(() -> new NotFoundException("Not found user by id"));
-        Article article = this.articleRepository.findById(commentRequest.getArticle_id())
-                .orElseThrow(() -> new NotFoundException("Not found article by id"));
+                UserResponse userResponse = new UserResponse();
 
-        comment.setContent(commentRequest.getContent());
-        comment.setUsers(user);
-        comment.setArticle(article);
+                userResponse.setUsername(comment.getUsers().getUsername());
+                userResponse.setEmail(comment.getUsers().getEmail());
+                userResponse.setBio(comment.getUsers().getEmail());
+                userResponse.setImage(comment.getUsers().getImage());
 
-        this.commentRepository.save(comment);
+                commentResponse.setUser(userResponse);
+                return MessageResponse.builder().message("Berhasil mendapatkan data").data(commentResponse)
+                                .statusCode(200)
+                                .build();
 
-        return MessageResponse.builder().message("Berhasil membuat comment").data(comment).statusCode(200).build();
-    }
+        }
 
-    public MessageResponse update(Long id, CommentRequest commentRequest) {
-        Comment comment = this.commentRepository.findById(id)
-                .orElseThrow(() -> new NotFoundException("Not found comment by id"));
+        @Override
+        public MessageResponse create(CommentRequest commentRequest) {
+                Comment comment = new Comment();
+                User user = this.userRepository.findById(commentRequest.getUser_id())
+                                .orElseThrow(() -> new NotFoundException("Not found user by id"));
+                Article article = this.articleRepository.findById(commentRequest.getArticle_id())
+                                .orElseThrow(() -> new NotFoundException("Not found article by id"));
 
-        User user = this.userRepository.findById(commentRequest.getUser_id())
-                .orElseThrow(() -> new NotFoundException("Not found user by id"));
-        Article article = this.articleRepository.findById(commentRequest.getArticle_id())
-                .orElseThrow(() -> new NotFoundException("Not found article by id"));
+                comment.setContent(commentRequest.getContent());
+                comment.setUsers(user);
+                comment.setArticle(article);
 
-        comment.setContent(commentRequest.getContent());
-        comment.setUsers(user);
-        comment.setArticle(article);
+                this.commentRepository.save(comment);
 
-        this.commentRepository.save(comment);
+                return MessageResponse.builder().message("Berhasil membuat comment").data(comment).statusCode(200)
+                                .build();
+        }
 
-        return MessageResponse.builder().message("Berhasil update comment").data(comment).statusCode(200).build();
-    }
+        @Override
+        public MessageResponse update(Long id, CommentRequest commentRequest) {
+                Comment comment = this.commentRepository.findById(id)
+                                .orElseThrow(() -> new NotFoundException("Not found comment by id"));
 
-    public MessageResponse deleteById(Long id) {
-        Comment comment = this.commentRepository.findById(id)
-                .orElseThrow(() -> new NotFoundException("Not found comment by id"));
-        this.commentRepository.delete(comment);
+                User user = this.userRepository.findById(commentRequest.getUser_id())
+                                .orElseThrow(() -> new NotFoundException("Not found user by id"));
+                Article article = this.articleRepository.findById(commentRequest.getArticle_id())
+                                .orElseThrow(() -> new NotFoundException("Not found article by id"));
 
-        return MessageResponse.builder().message("Berhasil update comment").data(null).statusCode(200).build();
+                comment.setContent(commentRequest.getContent());
+                comment.setUsers(user);
+                comment.setArticle(article);
 
-    }
+                this.commentRepository.save(comment);
+
+                return MessageResponse.builder().message("Berhasil update comment").data(comment).statusCode(200)
+                                .build();
+        }
+
+        @Override
+        public MessageResponse deleteById(Long id) {
+                Comment comment = this.commentRepository.findById(id)
+                                .orElseThrow(() -> new NotFoundException("Not found comment by id"));
+                this.commentRepository.delete(comment);
+
+                return MessageResponse.builder().message("Berhasil update comment").data(null).statusCode(200).build();
+
+        }
 }

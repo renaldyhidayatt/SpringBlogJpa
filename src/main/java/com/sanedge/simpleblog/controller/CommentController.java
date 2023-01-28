@@ -17,7 +17,7 @@ import com.sanedge.simpleblog.service.impl.CommentServiceImpl;
 
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
-@RequestMapping("/api/auth")
+@RequestMapping("/api/comment")
 public class CommentController {
     private final CommentServiceImpl commentServiceImpl;
 
@@ -31,7 +31,7 @@ public class CommentController {
         return this.commentServiceImpl.findAll();
     }
 
-    @PostMapping
+    @GetMapping("/{id}")
     public MessageResponse findById(@PathVariable Long id) {
         return this.commentServiceImpl.findById(id);
     }
